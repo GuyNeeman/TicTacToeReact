@@ -1,8 +1,9 @@
 body {
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
+  align-items: flex-start; /* change from center */
+  padding-top: 50px; /* optional spacing from top */
+  min-height: 100vh;
   background: #f8f9fa;
   font-family: Arial, sans-serif;
   margin: 0;
@@ -13,7 +14,7 @@ h1 {
   text-align: center;
 }
 
-button{
+button {
   color: black;
 }
 
@@ -48,6 +49,7 @@ button{
   margin-top: 20px;
   font-size: 1.2rem;
   text-align: center;
+  color: black; /* ensure visibility */
 }
 
 /* Reset button */
