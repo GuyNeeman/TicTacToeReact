@@ -2,38 +2,66 @@ import Square from "./Comp/square.jsx";
 import React, { useState } from "react";
 
 export default function TicTacToe() {
+    const size = 4;
+    const boxes = size * size;
+
     const [turn, setTurn] = useState("X");
-    const [squares, setSquares] = useState({
-        a: null, b: null, c: null,
-        d: null, e: null, f: null,
-        g: null, h: null, i: null
-    });
+    const [squares, setSquares] = useState(Array(boxes).fill(null));
     const [winner, setWinner] = useState(null);
 
     function calculateWinner(sq) {
-        const lines = [
-            ["a", "b", "c"],
-            ["d", "e", "f"],
-            ["g", "h", "i"],
-            ["a", "d", "g"],
-            ["b", "e", "h"],
-            ["c", "f", "i"],
-            ["a", "e", "i"],
-            ["c", "e", "g"],
-        ];
+        const winLength = size - 1;
+        const lines = [];
 
-        for (let [x, y, z] of lines) {
-            if (sq[x] && sq[x] === sq[y] && sq[x] === sq[z]) {
-                return sq[x];
+        // Rows
+        for (let r = 0; r < size; r++) {
+            const row = [];
+            for (let c = 0; c < size; c++) {
+                row.push(r * size + c);
+            }
+            lines.push(row);
+        }
+
+        // Cols
+        for (let c = 0; c < size; c++) {
+            const col = [];
+            for (let r = 0; r < size; r++) {
+                col.push(r * size + c);
+            }
+            lines.push(col);
+        }
+
+        // Diagonal (top-left → bottom-right)
+        const diag1 = [];
+        for (let i = 0; i < size; i++) {
+            diag1.push(i * size + i);
+        }
+        lines.push(diag1);
+
+        // Diagonal (top-right → bottom-left)
+        const diag2 = [];
+        for (let i = 0; i < size; i++) {
+            diag2.push(i * size + (size - 1 - i));
+        }
+        lines.push(diag2);
+
+        for (let line of lines) {
+            for (let start = 0; start <= line.length - winLength; start++) {
+                const segment = line.slice(start, start + winLength);
+                const first = sq[segment[0]];
+                if (first && segment.every(idx => sq[idx] === first)) {
+                    return first;
+                }
             }
         }
         return null;
     }
 
-    function handleClick(key) {
-        if (squares[key] || winner) return;
+    function handleClick(i) {
+        if (squares[i] || winner) return;
 
-        const nextSquares = { ...squares, [key]: turn };
+        const nextSquares = squares.slice();
+        nextSquares[i] = turn;
         setSquares(nextSquares);
 
         const win = calculateWinner(nextSquares);
@@ -45,35 +73,40 @@ export default function TicTacToe() {
     }
 
     function Reset() {
-        setSquares({a: null, b: null, c: null, d: null, e: null, f: null, g: null, h: null, i: null});
+        setSquares(Array(boxes).fill(null));
         setWinner(null);
         setTurn("X");
     }
 
     return (
-        <>
-            <div className="game">
-                <h1>Tic Tac Toe</h1>
-                <div className="grid">
-                    <Square onSquareClick={() => handleClick('a')} value={squares.a}/>
-                    <Square onSquareClick={() => handleClick('b')} value={squares.b}/>
-                    <Square onSquareClick={() => handleClick('c')} value={squares.c}/>
-                    <Square onSquareClick={() => handleClick('d')} value={squares.d}/>
-                    <Square onSquareClick={() => handleClick('e')} value={squares.e}/>
-                    <Square onSquareClick={() => handleClick('f')} value={squares.f}/>
-                    <Square onSquareClick={() => handleClick('g')} value={squares.g}/>
-                    <Square onSquareClick={() => handleClick('h')} value={squares.h}/>
-                    <Square onSquareClick={() => handleClick('i')} value={squares.i}/>
-                </div>
+        <div className="game">
+            <h1>Tic Tac Toe </h1>
 
-                <div className="status">
-                    {winner ? `Winner: ${winner}` : `Turn: ${turn}`}
-                </div>
-
-                <button className="reset" onClick={Reset}>
-                    Reset Game
-                </button>
+            <div
+                className="grid"
+                style={{
+                    display: "grid",
+                    gap: "5px",
+                    gridTemplateColumns: `repeat(${size}, 100px)`,
+                    gridTemplateRows: `repeat(${size}, 100px)`
+                }}
+            >
+                {squares.map((val, i) => (
+                    <Square
+                        key={i}
+                        onSquareClick={() => handleClick(i)}
+                        value={val}
+                    />
+                ))}
             </div>
-            </>
+
+            <div className="status">
+                {winner ? `Winner: ${winner}` : `Turn: ${turn}`}
+            </div>
+
+            <button className="reset" onClick={Reset}>
+                Reset Game
+            </button>
+        </div>
     );
 }

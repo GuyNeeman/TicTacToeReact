@@ -1,8 +1,8 @@
 body {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* change from center */
-  padding-top: 50px; /* optional spacing from top */
+  align-items: flex-start;
+  padding-top: 50px;
   min-height: 100vh;
   background: #f8f9fa;
   font-family: Arial, sans-serif;
@@ -24,15 +24,6 @@ button {
   align-items: center;
 }
 
-/* Board grid */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 100px);
-  grid-template-rows: repeat(3, 100px);
-  gap: 5px;
-}
-
-/* Each square */
 .square {
   background: white;
   border: 2px solid #333;
@@ -49,10 +40,9 @@ button {
   margin-top: 20px;
   font-size: 1.2rem;
   text-align: center;
-  color: black; /* ensure visibility */
+  color: black;
 }
 
-/* Reset button */
 button.reset {
   align-items: center;
   margin-top: 10px;
