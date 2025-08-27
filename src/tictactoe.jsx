@@ -1,12 +1,9 @@
 import Square from "./Comp/square.jsx";
 import React, { useState } from "react";
 
-export default function TicTacToe() {
-    const size = 4;
-    const boxes = size * size;
+export default function TicTacToe({squares, setSquares, size, boxes}) {
 
     const [turn, setTurn] = useState("X");
-    const [squares, setSquares] = useState(Array(boxes).fill(null));
     const [winner, setWinner] = useState(null);
 
     function calculateWinner(sq) {
@@ -91,11 +88,11 @@ export default function TicTacToe() {
                     gridTemplateRows: `repeat(${size}, 100px)`
                 }}
             >
-                {squares.map((val, i) => (
+                {squares.map((value, i) => (
                     <Square
                         key={i}
                         onSquareClick={() => handleClick(i)}
-                        value={val}
+                        value={value}
                     />
                 ))}
             </div>
