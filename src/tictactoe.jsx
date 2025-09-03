@@ -7,7 +7,6 @@ export default function TicTacToe({squares, setSquares, size, boxes}) {
     const [winner, setWinner] = useState(null);
 
     function calculateWinner(sq) {
-        const winLength = size - 1;
         const lines = [];
 
         // Rows
@@ -43,12 +42,9 @@ export default function TicTacToe({squares, setSquares, size, boxes}) {
         lines.push(diag2);
 
         for (let line of lines) {
-            for (let start = 0; start <= line.length - winLength; start++) {
-                const segment = line.slice(start, start + winLength);
-                const first = sq[segment[0]];
-                if (first && segment.every(idx => sq[idx] === first)) {
-                    return first;
-                }
+            const first = sq[line[0]];
+            if (first && line.every(idx => sq[idx] === first)) {
+                return first;
             }
         }
         return null;
